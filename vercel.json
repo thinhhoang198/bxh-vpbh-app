@@ -2,6 +2,6 @@
   "functions": {
     "api/leaderboard.ts": { "includeFiles": "public/mocks/**" }
   },
-  "rewrites": [{ "source": "/((?!api/|brand/|mocks/|assets/).*)", "destination": "/index.html" }],
+  "rewrites": [{ "source": "/((?!api/|brand/|mocks/|assets/|favicon|apple-touch-icon|robots.txt).*)", "destination": "/index.html" }],
   "headers": [{ "source": "/(.*)", "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }] }]
 }

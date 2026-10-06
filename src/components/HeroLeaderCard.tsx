@@ -18,7 +18,7 @@ export function HeroLeaderCard({ leader, week, minGuests, prizeVnd, now }: Props
   return (
     <section
       aria-label={`Dẫn đầu tuần ${week.week}`}
-      className="noise relative overflow-hidden rounded-card bg-gradient-to-br from-purple-800 to-purple-700 p-5 text-white shadow-card md:p-7"
+      className="relative overflow-hidden rounded-card bg-purple-800 p-5 text-white shadow-card md:p-7"
     >
       <div className="relative flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
         <div className="min-w-0">

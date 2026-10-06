@@ -67,13 +67,13 @@ export default function TvLayout() {
   }
 
   return (
-    <div className="noise relative flex h-screen w-screen cursor-none select-none flex-col overflow-hidden bg-gradient-to-br from-purple-900 via-purple-800 to-purple-700 text-white">
+    <div className="relative flex h-screen w-screen cursor-none select-none flex-col overflow-hidden bg-purple-800 text-white">
       <header className="relative flex items-center justify-between gap-[2vw] px-[2.5vw] pb-[1vh] pt-[2vh]">
         <div className="flex items-center gap-[2vw]">
           <Logo heightClass="h-[7vh]" />
           <div>
             <p className="text-[1.1vw] font-semibold tracking-[0.25em] text-orange-500">TỌA ĐỘ BỨT PHÁ</p>
-            <h1 className="rose-gold-text text-[2.4vw] font-extrabold">Dẫn lối khách hàng - Chinh phục booking</h1>
+            <h1 className="text-[2.4vw] font-extrabold leading-tight">Dẫn lối khách hàng - Chinh phục booking</h1>
           </div>
         </div>
         <div className="text-right">

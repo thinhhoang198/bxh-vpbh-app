@@ -10,7 +10,7 @@ export function NotStartedCard({ programStart, now }: { programStart: string; no
   return (
     <section
       aria-label="Chương trình chưa bắt đầu"
-      className="noise relative overflow-hidden rounded-card bg-gradient-to-br from-purple-800 to-purple-700 p-6 text-center text-white shadow-card md:p-10"
+      className="relative overflow-hidden rounded-card bg-purple-800 p-6 text-center text-white shadow-card md:p-10"
     >
       <div className="relative">
         <p className="text-xs font-semibold tracking-[0.2em] text-orange-500">CHƯƠNG TRÌNH CHƯA BẮT ĐẦU</p>
