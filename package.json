@@ -9,9 +9,7 @@
     "preview": "vite preview",
     "typecheck": "tsc -b --noEmit",
     "lint": "eslint .",
-    "test": "vitest run",
-    "gen-mock": "tsx scripts/gen-mock.ts",
-    "screenshots": "tsx scripts/screenshots.ts"
+    "test": "vitest run"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.104.1",

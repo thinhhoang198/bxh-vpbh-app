@@ -201,7 +201,7 @@ function rank_(items, keyOf, limit, toEntry) {
 
 /**
  * Same formulas as the sheet "Giải tuần" (B/C columns) and Dữ liệu!T, with C13 = weekAnchor:
- *   week 1 : C7 .. MIN(C8, C13 + 13)         (extended first week)
+ *   week 1 : C7 .. MIN(C8, C13 + 13)         (C7 = first Monday, C13 = that Monday minus 7 days)
  *   week k : MAX(C7, C13 + 7k) .. MIN(C8, C13 + 7k + 6)
  */
 function buildWeeks_(cfg, nowMs) {

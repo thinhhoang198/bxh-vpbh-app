@@ -1,6 +1,10 @@
 import { useRef } from 'react';
-import { formatDate, formatVnd } from '../lib/format';
+import { endOfDayMs, formatDate, formatVnd, startOfDayMs } from '../lib/format';
 import type { Summary } from '../lib/types';
+
+/** A normal week is exactly 7 days (Monday to Sunday). */
+const isRegularWeek = (w: { start: string; end: string }) =>
+  Math.round((endOfDayMs(w.end) - startOfDayMs(w.start)) / 86_400_000) === 7;
 
 export function RulesDialog({ meta }: { meta?: Summary['meta'] }) {
   const ref = useRef<HTMLDialogElement>(null);
@@ -36,8 +40,10 @@ export function RulesDialog({ meta }: { meta?: Summary['meta'] }) {
               {meta
                 ? `${formatDate(meta.programStart)} đến ${formatDate(meta.programEnd)}, gồm ${meta.totalWeeks} tuần.`
                 : 'Xem thông tin trên bảng xếp hạng.'}{' '}
-              {w1 &&
-                `Tuần 1 kéo dài từ ${formatDate(w1.start)} đến ${formatDate(w1.end)}; từ tuần 2 mỗi tuần tính từ Thứ Hai đến Chủ nhật.`}
+              {w1 && isRegularWeek(w1)
+                ? 'Mỗi tuần tính từ Thứ Hai đến Chủ nhật.'
+                : w1 &&
+                  `Tuần 1 kéo dài từ ${formatDate(w1.start)} đến ${formatDate(w1.end)}; từ tuần 2 mỗi tuần tính từ Thứ Hai đến Chủ nhật.`}
             </li>
             <li>
               <b>Điểm:</b> tổng số khách thực tế được lễ tân xác nhận khi

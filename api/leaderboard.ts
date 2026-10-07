@@ -1,6 +1,4 @@
 import { createHash, timingSafeEqual } from "node:crypto";
-import { readFile } from "node:fs/promises";
-import { join } from "node:path";
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { SummarySchema, WeekResponseSchema } from "../src/lib/types.js";
 
@@ -24,11 +22,6 @@ function send(res: VercelResponse, status: number, body: unknown, cache: string)
   res.setHeader("X-Robots-Tag", "noindex, nofollow");
   res.setHeader("Cache-Control", cache);
   res.status(status).json(body);
-}
-
-async function readMock(week: number | null): Promise<unknown> {
-  const file = join(process.cwd(), "public", "mocks", week ? `week-${week}.json` : "summary.json");
-  return JSON.parse(await readFile(file, "utf8"));
 }
 
 async function readUpstream(week: number | null): Promise<unknown> {
@@ -71,9 +64,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     if (hit && Date.now() - hit.at < MEMORY_TTL_MS) return send(res, 200, hit.body, cache);
   }
 
+  if (!process.env.APPS_SCRIPT_URL) {
+    console.error("leaderboard: APPS_SCRIPT_URL is not set");
+    return send(res, 503, { error: "not_configured" }, "no-store");
+  }
+
   try {
-    const useMock = process.env.USE_MOCK === "1" || !process.env.APPS_SCRIPT_URL;
-    const raw = useMock ? await readMock(week) : await readUpstream(week);
+    const raw = await readUpstream(week);
     const body = week ? WeekResponseSchema.parse(raw) : SummarySchema.parse(raw);
     if (accessCode) memory.set(memKey, { at: Date.now(), body });
     return send(res, 200, body, cache);

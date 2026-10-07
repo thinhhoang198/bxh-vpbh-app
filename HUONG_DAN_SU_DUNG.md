@@ -7,8 +7,8 @@ Tài liệu này dành cho CVKD, lễ tân và BTC. Phần cài đặt kỹ thu�
 Trang web cho bạn xem thứ hạng trong trò chơi thi đua **Dẫn lối khách hàng - Chinh phục booking**, cập nhật tự động,
 không cần đăng nhập (trừ khi BTC bật mã truy cập).
 
-- **Thời gian:** 07/10/2026 đến 27/12/2026, gồm 11 tuần. Tuần 1 kéo dài từ Thứ Tư 07/10 đến Chủ nhật 18/10.
-  Từ tuần 2, mỗi tuần tính từ Thứ Hai đến Chủ nhật.
+- **Thời gian:** 12/10/2026 đến 27/12/2026, gồm 11 tuần. Mỗi tuần tính từ Thứ Hai đến Chủ nhật
+  (tuần 1: 12/10 đến 18/10).
 - **Điểm:** 1 khách được lễ tân xác nhận khi check-in tại VPBH = 1 điểm.
 - **Giải tuần:** người có số khách cao nhất tuần và đạt tối thiểu **5 khách** nhận **1.000.000 VNĐ**.
   Tuần nào không ai đạt 5 khách thì không có giải.
@@ -21,7 +21,7 @@ không cần đăng nhập (trừ khi BTC bật mã truy cập).
 Mở địa chỉ BTC cung cấp (dự kiến `https://bxh.nammekonggrandplaza.com`) trên điện thoại hoặc máy tính.
 Nếu thấy ô **Nhập mã truy cập**, nhập mã do BTC gửi rồi bấm **Xem bảng xếp hạng**.
 
-Trước ngày 07/10/2026, trang hiện đồng hồ đếm ngược tới lúc chương trình bắt đầu.
+Trước ngày 12/10/2026, trang hiện đồng hồ đếm ngược tới lúc chương trình bắt đầu.
 
 ## 3. Đọc trang
 

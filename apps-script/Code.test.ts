@@ -17,7 +17,7 @@ const plain = <T>(v: T): T => JSON.parse(JSON.stringify(v));
 
 const vn = (s: string) => new Date(`${s}+07:00`);
 const CFG = {
-  programStart: vn("2026-10-07T00:00"),
+  programStart: vn("2026-10-12T00:00"),
   programEnd: vn("2026-12-27T00:00"),
   minGuests: 5,
   prizeVnd: 1_000_000,
@@ -99,15 +99,15 @@ describe("Code.gs snapshot", () => {
     expect(summary.meta.dataAsOf).toBe("2026-10-21T09:15+07:00"); // newest row of Dữ liệu!C
     expect(summary.meta.generatedAt).toBe("2026-10-21T10:30+07:00");
   });
-  it("builds the extended week 1 and regular weeks", () => {
+  it("builds seven-day weeks from Monday 12/10 (C13 = 05/10)", () => {
     const w = summary.meta.weeks;
     expect(w).toHaveLength(11);
-    expect(w[0]).toMatchObject({ start: "2026-10-07", end: "2026-10-18", status: "ended" });
+    expect(w[0]).toMatchObject({ start: "2026-10-12", end: "2026-10-18", status: "ended" });
     expect(w[1]).toMatchObject({ start: "2026-10-19", end: "2026-10-25", status: "ongoing" });
     expect(w[2].status).toBe("upcoming");
     expect(w[10]).toMatchObject({ start: "2026-12-21", end: "2026-12-27" });
     expect(summary.meta.currentWeek).toBe(2);
-    expect(summary.meta.programStart).toBe("2026-10-07");
+    expect(summary.meta.programStart).toBe("2026-10-12");
     expect(summary.meta.programEnd).toBe("2026-12-27");
   });
   it("lists per-week entries with weekly guests, only keys > 0", () => {
