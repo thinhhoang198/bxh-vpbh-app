@@ -81,17 +81,16 @@ nguồn mà sheet **Dữ liệu** đang IMPORTRANGE).
 | `C8`  | 27/12/2026 (kết thúc chương trình)                                         |
 | `C10` | 5 (số khách tối thiểu mỗi tuần)                                            |
 | `C11` | 1000000 (tiền giải tuần)                                                   |
-| `C13` | **05/10/2026** (Thứ Hai **trước** ngày khởi động 1 tuần, mốc chia tuần)    |
-| `C14` | công thức `=INT((C8-C13)/7)`, kết quả **11** (số tuần, **không** gõ đè số) |
+| `C13` | công thức `=C7-WEEKDAY(C7,2)+1`, kết quả **12/10/2026** (Thứ Hai của tuần chứa ngày bắt đầu) |
+| `C14` | công thức `=INT((C8-C13)/7)+1`, kết quả **11** (số tuần, **không** gõ đè số)   |
 
-**`C13` phải là 05/10/2026, không đặt 12/10.** Công thức của sheet tính số tuần bằng `INT((ngày - C13) / 7)` và tuần n
-bắt đầu từ `C13 + 7n`. Vì vậy `C13` phải là Thứ Hai **trước** Thứ Hai khởi động đúng 7 ngày. Với `C13` = 05/10 thì
-tuần 1 là 12/10 đến 18/10, tuần 2 bắt đầu 19/10, `C14` ra 11. Nếu đặt `C13` = 12/10 thì tuần 1 bị kéo dài thành
-12/10 đến 25/10 và chỉ còn 10 tuần.
+**Cách sheet chia tuần:** `C13` là Thứ Hai của tuần chứa `C7`, tuần k bắt đầu từ `C13 + 7(k-1)` và kết thúc sau 6 ngày
+(bị chặn bởi `C7` và `C8`). Vì `C7` là Thứ Hai 12/10 nên tuần 1 là 12/10 đến 18/10, tuần 2 là 19/10 đến 25/10, tuần 11 là
+21/12 đến 27/12. Công thức tuần của từng check-in (sheet Dữ liệu cột T) là `MAX(1, INT((ngày - C13)/7) + 1)`.
 
-**Khi dời ngày bắt đầu:** chỉ sửa `C7` (và `C8` nếu đổi ngày kết thúc), rồi đặt `C13` = Thứ Hai trước ngày bắt đầu
-1 tuần. Các ghi chú trong sheet còn nhắc "tuần 1 kéo dài 12 ngày (07/10 đến 18/10)" (Cấu hình D13 và D14,
-BXH tuần A2) cần sửa lại cho khớp, vì không còn đúng.
+**Khi dời ngày bắt đầu:** chỉ cần sửa `C7` (và `C8` nếu đổi ngày kết thúc); `C13`, `C14` và các ghi chú trong sheet tự
+cập nhật. Sau khi sửa công thức tuần trong sheet, nhớ **cập nhật cả Apps Script** (dán lại `Code.gs` và tạo phiên bản
+triển khai mới), nếu không web sẽ chia tuần theo công thức cũ và lệch với sheet.
 
 **Script đọc những gì (không đụng sheet nào khác):**
 
@@ -99,15 +98,15 @@ BXH tuần A2) cần sửa lại cho khớp, vì không còn đúng.
 | ---------------------- | ---------------------------- | ------------------------------------------------------------------------------------------------ |
 | Cấu hình               | C7, C8                       | ngày bắt đầu, ngày kết thúc chương trình                                                         |
 | Cấu hình               | C10, C11                     | mốc khách tối thiểu/tuần (5), tiền giải/tuần (1.000.000)                                         |
-| Cấu hình               | C13, C14                     | mốc chia tuần (05/10/2026) và số tuần (11)                                                       |
+| Cấu hình               | C13, C14                     | mốc chia tuần (Thứ Hai của tuần chứa ngày bắt đầu, 12/10/2026) và số tuần (11)                   |
 | CVKD (hàng 2 đến 1201) | C, D, E (hoặc F), G, H, I, K | SĐT chuẩn (chỉ để che số), họ tên, đại lý, tổng khách, số lượt, check-in gần nhất, điểm xếp hạng |
 | CVKD                   | N đến AB, AC đến AQ          | số khách theo tuần 1 đến 15 và khóa xếp hạng tuần (0 = không có khách)                           |
 | Dữ liệu                | C2:C4001                     | giờ check-in, chỉ để lấy thời điểm "Dữ liệu tính đến"                                            |
 
 Script **không** đọc cột Cảnh báo (CVKD!J), CCCD, tên khách hay bất kỳ cột nào khác của sheet Dữ liệu.
 
-Cách chia tuần giống hệt công thức của sheet **Giải tuần** và **Dữ liệu!T**: tuần 1 từ C7 đến `C13 + 13 ngày`
-(12/10 đến 18/10), tuần n từ 2 là `C13 + 7n` đến `+ 6 ngày`, tuần cuối bị chặn bởi C8 (21/12 đến 27/12).
+Cách chia tuần giống hệt công thức của sheet **Giải tuần** và **Dữ liệu!T**: tuần k từ
+`MAX(C7, C13 + 7(k-1))` đến `MIN(C8, C13 + 7(k-1) + 6)`: tuần 1 là 12/10 đến 18/10, tuần 11 là 21/12 đến 27/12.
 Thứ hạng lấy theo cột **Điểm xếp hạng** (K) và **Xếp tuần** (AC đến AQ) mà sheet đã tính sẵn (nhiều khách hơn xếp trên,
 bằng nhau thì check-in sớm hơn xếp trên). Khi trùng hoàn toàn, hai người cùng hạng và người ở dòng trên của CVKD
 được hiển thị trước, giống cách sheet chọn người nhận giải (cột "Lưu ý" của sheet Giải tuần báo BTC xác định).
@@ -186,7 +185,7 @@ Nếu TV có mã truy cập, nhập mã một lần bằng bàn phím.
 
 - Dự án mới độc lập (repo trống ban đầu), không phải website check-in hiện có, nên route `/` và `/bxh` cùng hiển thị bảng xếp hạng.
 - Lịch chương trình theo chỉ đạo mới nhất của BTC (ngày 07/10/2026): bắt đầu Thứ Hai 12/10/2026 (dời từ 07/10, tuần 1 đủ 7 ngày như các tuần khác),
-  kết thúc Chủ nhật 27/12/2026 (tuần trước 31/12), 11 tuần. Lịch lấy từ sheet nên khi đổi lịch chỉ cần sửa các ô ở `Cấu hình` (C7, C8, C13).
+  kết thúc Chủ nhật 27/12/2026 (tuần trước 31/12), 11 tuần. Lịch lấy từ sheet nên khi đổi lịch chỉ cần sửa các ô ở `Cấu hình` (C7, C8).
 - Tailwind v4 với `@theme` (không có `tailwind.config.js`). Font Be Vietnam Pro (kể cả tiêu đề, hỗ trợ đầy đủ dấu tiếng Việt) tải từ Google Fonts.
 - Màu chữ cam cỡ nhỏ trên nền sáng dùng `#9A5200` (màu phái sinh) thay vì `#C26A05` vì `#C26A05` chỉ đạt khoảng 3,9:1,
   chưa đủ WCAG AA cho chữ nhỏ. `#C26A05` giữ lại cho chữ lớn.

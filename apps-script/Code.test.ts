@@ -21,7 +21,7 @@ const CFG = {
   programEnd: vn("2026-12-27T00:00"),
   minGuests: 5,
   prizeVnd: 1_000_000,
-  weekAnchor: vn("2026-10-05T00:00"), // Cấu hình!C13 in the real sheet
+  weekAnchor: vn("2026-10-12T00:00"), // Cấu hình!C13 = C7-WEEKDAY(C7,2)+1 in the real sheet
   dataTimes: [vn("2026-10-05T08:25"), "", vn("2026-10-21T09:15")],
   totalWeeks: 11,
 };
@@ -99,7 +99,7 @@ describe("Code.gs snapshot", () => {
     expect(summary.meta.dataAsOf).toBe("2026-10-21T09:15+07:00"); // newest row of Dữ liệu!C
     expect(summary.meta.generatedAt).toBe("2026-10-21T10:30+07:00");
   });
-  it("builds seven-day weeks from Monday 12/10 (C13 = 05/10)", () => {
+  it("builds seven-day weeks from Monday 12/10 (C13 = 12/10)", () => {
     const w = summary.meta.weeks;
     expect(w).toHaveLength(11);
     expect(w[0]).toMatchObject({ start: "2026-10-12", end: "2026-10-18", status: "ended" });

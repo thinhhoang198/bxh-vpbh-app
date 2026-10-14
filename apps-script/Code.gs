@@ -105,8 +105,8 @@ function readSheet_() {
       programEnd: wallTime_(cfg[1][0], tz), // C8
       minGuests: cfg[3][0], // C10
       prizeVnd: cfg[4][0], // C11
-      weekAnchor: wallTime_(cfg[6][0], tz), // C13: Monday of the week that contains the start date
-      totalWeeks: cfg[7][0], // C14: =INT((C8-C13)/7)
+      weekAnchor: wallTime_(cfg[6][0], tz), // C13: =C7-WEEKDAY(C7,2)+1, Monday of the start week
+      totalWeeks: cfg[7][0], // C14: =INT((C8-C13)/7)+1
       dataTimes: data.map(function (r) { return wallTime_(r[0], tz); }),
     },
     rows: rows,
@@ -200,9 +200,10 @@ function rank_(items, keyOf, limit, toEntry) {
 }
 
 /**
- * Same formulas as the sheet "Giải tuần" (B/C columns) and Dữ liệu!T, with C13 = weekAnchor:
- *   week 1 : C7 .. MIN(C8, C13 + 13)         (C7 = first Monday, C13 = that Monday minus 7 days)
- *   week k : MAX(C7, C13 + 7k) .. MIN(C8, C13 + 7k + 6)
+ * Same formulas as the sheet "Giải tuần" (B/C columns) and Dữ liệu!T. C13 is the Monday of the week
+ * that contains the start date (=C7-WEEKDAY(C7,2)+1) and C14 = INT((C8-C13)/7)+1:
+ *   week k : MAX(C7, C13 + 7(k-1)) .. MIN(C8, C13 + 7(k-1) + 6)
+ * With C7 = Monday 12/10 every week is exactly Monday..Sunday and week 1 = 12/10..18/10.
  */
 function buildWeeks_(cfg, nowMs) {
   var start = dateStr_(toMs_(cfg.programStart));
@@ -212,9 +213,9 @@ function buildWeeks_(cfg, nowMs) {
   var today = dateStr_(nowMs);
   var weeks = [];
   for (var k = 1; k <= total; k++) {
-    var s = k === 1 ? start : addDays_(anchor, 7 * k);
+    var s = addDays_(anchor, 7 * (k - 1));
     if (s < start) s = start;
-    var e = addDays_(anchor, 7 * k + 6);
+    var e = addDays_(anchor, 7 * (k - 1) + 6);
     if (e > end) e = end;
     weeks.push({ week: k, start: s, end: e, status: today < s ? "upcoming" : today > e ? "ended" : "ongoing" });
   }
