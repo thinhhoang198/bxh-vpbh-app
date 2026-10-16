@@ -30,6 +30,15 @@ var TOP_WEEK = 200;
 var VN_OFFSET_MS = 7 * 3600 * 1000;
 var DAY_MS = 24 * 3600 * 1000;
 
+/**
+ * Display names for agencies whose name in the check-in system differs from the name to show publicly.
+ * Key = agency name as it appears in the sheet (upper-case), value = name shown on the leaderboard.
+ * The sheet itself keeps the system name, so its matching against "Cấu hình" is not affected.
+ */
+var AGENCY_DISPLAY_NAMES = {
+  "ĐỘNG LỰC PHƯƠNG ĐÔNG": "EMG",
+};
+
 // 0-based indexes inside a CVKD row (A = 0)
 var COL = { PHONE: 2, NAME: 3, AGENCY: 4, AGENCY_STD: 5, GUESTS: 6, VISITS: 7, LAST: 8, KEY: 10, WEEK_GUESTS: 13, WEEK_KEYS: 28 };
 
@@ -156,6 +165,13 @@ function text_(v) {
   return String(v == null ? "" : v).trim();
 }
 
+/** Applies AGENCY_DISPLAY_NAMES (case, spacing and Unicode-normalisation insensitive). */
+function agencyName_(v) {
+  var t = text_(v);
+  var key = t.normalize("NFC").replace(/\s+/g, " ").toUpperCase();
+  return Object.prototype.hasOwnProperty.call(AGENCY_DISPLAY_NAMES, key) ? AGENCY_DISPLAY_NAMES[key] : t;
+}
+
 function num_(v) {
   var n = Number(v);
   return isFinite(n) ? n : 0;
@@ -250,7 +266,7 @@ function buildSnapshot_(cfg, rawRows, nowMs) {
     items.push({
       row: i,
       name: properCase_(r[COL.NAME]),
-      agency: text_(r[COL.AGENCY]) || text_(r[COL.AGENCY_STD]), // display name, else the standardised upper-case one
+      agency: agencyName_(text_(r[COL.AGENCY]) || text_(r[COL.AGENCY_STD])), // display name, else the standardised upper-case one
       phoneMasked: masked,
       guests: num_(r[COL.GUESTS]),
       visits: num_(r[COL.VISITS]),

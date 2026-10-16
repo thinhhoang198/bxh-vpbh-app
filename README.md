@@ -103,6 +103,11 @@ triển khai mới), nếu không web sẽ chia tuần theo công thức cũ và
 | CVKD                   | N đến AB, AC đến AQ          | số khách theo tuần 1 đến 15 và khóa xếp hạng tuần (0 = không có khách)                           |
 | Dữ liệu                | C2:C4001                     | giờ check-in, chỉ để lấy thời điểm "Dữ liệu tính đến"                                            |
 
+**Tên đại lý hiển thị:** tên lấy từ cột Đại lý của sheet CVKD. Riêng đại lý có tên trong hệ thống là
+"ĐỘNG LỰC PHƯƠNG ĐÔNG" được hiển thị trên web là **EMG** (bảng `AGENCY_DISPLAY_NAMES` ở đầu `Code.gs`, thêm đại lý
+khác bằng cách thêm một dòng `"TÊN TRONG HỆ THỐNG": "TÊN HIỂN THỊ"`). Sheet vẫn giữ tên hệ thống nên việc khớp với danh
+sách đại lý hợp lệ trong `Cấu hình` không bị ảnh hưởng.
+
 Script **không** đọc cột Cảnh báo (CVKD!J), CCCD, tên khách hay bất kỳ cột nào khác của sheet Dữ liệu.
 
 Cách chia tuần giống hệt công thức của sheet **Giải tuần** và **Dữ liệu!T**: tuần k từ

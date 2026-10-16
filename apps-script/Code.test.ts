@@ -12,6 +12,7 @@ const gs = sandbox as {
   maskPhone_: (v: unknown) => string | null;
   properCase_: (s: string) => string;
   toMs_: (v: unknown) => number;
+  agencyName_: (v: unknown) => string;
 };
 const plain = <T>(v: T): T => JSON.parse(JSON.stringify(v));
 
@@ -66,6 +67,23 @@ describe("Code.gs helpers", () => {
     // Sheets serial number (cell formatted as a plain number) = 2026-10-21 10:30
     expect(gs.toMs_(46316.4375)).toBe(vn("2026-10-21T10:30").getTime());
     expect(Number.isNaN(gs.toMs_(7))).toBe(true); // small numbers are never dates
+  });
+});
+
+describe("agency display names", () => {
+  it("shows EMG for the agency registered as ĐỘNG LỰC PHƯƠNG ĐÔNG", () => {
+    expect(gs.agencyName_("ĐỘNG LỰC PHƯƠNG ĐÔNG")).toBe("EMG");
+    expect(gs.agencyName_("  Động Lực  Phương Đông ")).toBe("EMG");
+    expect(gs.agencyName_("ANB")).toBe("ANB");
+  });
+  it("applies to every ranking that lists the agency", () => {
+    const rows = [row({ phone: "0905111222", name: "Phạm Thị Hoa", agency: "ĐỘNG LỰC PHƯƠNG ĐÔNG", guests: 2, visits: 1, last: vn("2026-10-20T09:00"), key: 200, wg: { 2: 2 }, wk: { 2: 200 } })];
+    const snap = gs.buildSnapshot_(CFG, rows, NOW);
+    const s = plain(snap.summary) as { overall: { agency: string }[]; currentWeekEntries: { agency: string }[]; winners: { agency: string }[] };
+    expect(s.overall[0].agency).toBe("EMG");
+    expect(s.currentWeekEntries[0].agency).toBe("EMG");
+    expect(s.winners[0].agency).toBe("EMG");
+    expect(JSON.stringify(plain(snap.weeks))).not.toMatch(/PHƯƠNG ĐÔNG/);
   });
 });
 
